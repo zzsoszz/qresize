@@ -21,18 +21,28 @@
 				   }
 				   return ratio;
 		};
-		function scaleComponent(ele,windowWidth,windowHeight) {
-			    //var scale;
-			    //ele.attr('style', 'transform:scale(' + scale*detectZoom() + ')');
-			    console.log("zoom",detectZoom());
-			    console.log("windowWidth:"+windowWidth+"  windowHeight:",windowHeight);
+		function scaleComponent(ele,scale) {
+				ele.css("transform-origin","0 0");
+				ele.css("transform","scale("+scale+")");
 		};
+		var windowMinWidth=960;
 		$.fn[plugname] = function() {
 			var self=$(this);
-			console.log("zoom",detectZoom());
-			console.log("windowWidth:"+$(window).width()+"  windowHeight:",$(window).height());
-	  		$(window).resize(function () {
-	  		  	scaleComponent(self,$(window).width(),$(window).height());
+			logdata(self);
+	  		$(window).resize(function (){
+	  			logdata(self);
 			});
-		}
+		};
+		function logdata(ele){
+			var scale=1;
+			if($(window).width()<windowMinWidth){
+				scale=$(window).width()/windowMinWidth;
+			};
+			var str= "windowWidth:"+$(window).width()+"  windowHeight:"+$(window).height();
+			var zoom=detectZoom();
+			console.log();
+			console.log(str);
+			ele.html(str+"  <br/>"+"zoom:"+zoom+"scale:"+scale);
+			scaleComponent(ele,scale);
+		};
 })(jQuery);
